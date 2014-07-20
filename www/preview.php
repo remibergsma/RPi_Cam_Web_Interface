@@ -4,7 +4,7 @@
     <title>RPi Cam Download</title>
   </head>
   <body>
-    <p><a href="index.html">Back</a></p>
+    <p><a href="index.html">Home</a> <a href="preview.php">Back</a></p>
     <?php
       if(isset($_GET["delete"])) {
         unlink("media/" . $_GET["delete"]);
@@ -20,19 +20,39 @@
         echo "<p><input type='button' value='Download' onclick='window.open(\"download.php?file=" . $_GET["file"] . "\", \"_blank\");'> ";
         echo "<input type='button' value='Delete' onclick='window.location=\"preview.php?delete=" . $_GET["file"] . "\";'></p>";
       }
-    ?>
-    <h1>Files</h1>
-    <?php
-      $files = scandir("media");
-      if(count($files) == 2) echo "<p>No videos/images saved</p>";
+    echo "<h1>Files</h1>";
+      // display images
+      $dir = "media";
+      chdir($dir);
+      $counter=0;
+      $files = array_reverse(glob("*.jpg"));
+      if(count($files) == 2) echo "<p>No images saved</p>";
       else {
         foreach($files as $file) {
           if(($file != '.') && ($file != '..')) {
-            $fsz = round ((filesize("media/" . $file)) / (1024 * 1024));
+            if ($counter < 16) {
+              $counter++;
+              echo "<a href='preview.php?file=$file'><img src=timthumb.php?src=media/$file&w=200></a>";
+            } else {
+              $fsz = round ((filesize($file)) / (1024 * 1024));
+              echo "<p><a href='preview.php?file=$file'>$file</a> ($fsz MB)</p>";
+            }
+          }
+        }
+        echo "<p><input type='button' value='Delete all movies and images' onclick='if(confirm(\"Delete all?\")) {window.location=\"preview.php?delete_all\";}'></p>";
+      }
+
+      // list movies
+      $files = array_reverse(glob("*.mp4"));
+      if(count($files) == 2) echo "<p>No videos saved</p>";
+      else {
+        foreach($files as $file) {
+          if(($file != '.') && ($file != '..')) {
+            $fsz = round ((filesize($file)) / (1024 * 1024));
             echo "<p><a href='preview.php?file=$file'>$file</a> ($fsz MB)</p>";
           }
         }
-        echo "<p><input type='button' value='Delete all' onclick='if(confirm(\"Delete all?\")) {window.location=\"preview.php?delete_all\";}'></p>";
+        echo "<p><input type='button' value='Delete all movies and images' onclick='if(confirm(\"Delete all?\")) {window.location=\"preview.php?delete_all\";}'></p>";
       }
     ?>
   </body>

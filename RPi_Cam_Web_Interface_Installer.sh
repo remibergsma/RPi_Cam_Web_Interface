@@ -32,7 +32,7 @@ case "$1" in
 
   remove)
         sudo killall raspimjpeg
-        sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion
+        sudo apt-get remove -y apache2 php5 php5-gd libapache2-mod-php5 gpac motion
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/*
@@ -59,7 +59,7 @@ case "$1" in
   install)
         sudo killall raspimjpeg
         git pull origin master
-        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
+        sudo apt-get install -y apache2 php5 php5-gd libapache2-mod-php5 gpac motion
 
         sudo cp -r www/* /var/www/
         sudo mkdir -p /var/www/media
