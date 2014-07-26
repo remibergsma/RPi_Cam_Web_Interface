@@ -51,7 +51,7 @@ switch ($_GET['cmd']) {
 		fwrite($pipe, "ca 0");
 		fclose($pipe);
 		// video processing time
-		sleep($sleep);
+		sleep(floor($sleep/2));
 		break;
 
 	case "photo":
